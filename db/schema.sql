@@ -1,10 +1,12 @@
+USE employees;
+
 DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS departments;
 
 CREATE TABLE departments (
     id INTEGER UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL
+    department VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE roles (
