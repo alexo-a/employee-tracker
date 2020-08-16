@@ -1,12 +1,20 @@
-const mysql = require('mysql').verbose();
+const mysql = require('mysql2');
 
 // Connect to database
-const db = new mysql.Database('./db/employees.db', err => {
-    if (err) {
-        return console.error(err.message);
-    }
-
-    console.log('Connected to the employees database.');
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'IloveLamp6969',
+    database: "employees"
 });
 
-module.exports = db;
+connection.connect(function (err) {
+    if (err) {
+        console.error('error connecting: ' + err.stack);
+        return;
+    }
+
+    console.log('connected as id ' + connection.threadId);
+});
+
+module.exports = connection;

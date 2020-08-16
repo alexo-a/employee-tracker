@@ -1,16 +1,18 @@
 const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
-const db = require('./db/database');
-const apiRoutes = require('./routes/apiRoutes');
-const mysql = require('mysql2');
+const connection = require('./db/database');
+//const apiRoutes = require('./routes/apiRoutes');
 const cTable = require('console.table');
+
+
+
 
 // Express middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use('/api', apiRoutes);
+//app.use('/api', apiRoutes);
 
 // Default response for any other requests(Not Found) Catch all
 app.use((req, res) => {
@@ -19,7 +21,7 @@ app.use((req, res) => {
 });
 
 // Start server after DB connection
-db.on('open', () => {
+connection.on('open', () => {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     });
