@@ -8,6 +8,27 @@ function getRoles(con, func) {
         }
     );
 }
+function addRole(name, salary, department, con, func) {
+    con.promise().execute(
+        `INSERT INTO roles (title, salary, department_id) VALUES ("${name}", ${salary}, ${department})`,
+        function (err, results, fields) {
+            console.log(name + " successfully added!");
+            func();
+        }
+    );
+}
 
+function getRolesArray(con) {
+    let rolesArray = [];
+    con.promise().query(
+        'SELECT * FROM roles',
+        function (err, results, fields) {
+            for (let i = 0; i < results.length; i++) {
+                rolesArray.push({ "value": results[i].id, "name": results[i].title })
+            }
+        }
+    );
+    return rolesArray;
+}
 
-module.exports = getRoles;
+module.exports = { getRoles, addRole, getRolesArray };
