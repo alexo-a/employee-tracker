@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
 });
 
 const cTable = require('console.table');
-const getDepartments = require("./utils/departments.js")
+const {getDepartments, addDepartment} = require("./utils/departments.js")
 const getEmployees = require("./utils/employees.js")
 const getRoles = require("./utils/roles.js")
 /*GIVEN a command - line application that accepts user input
@@ -67,13 +67,11 @@ let mainPrompt = {
 };
 console.log("Welcome to the Employee Tracker!");
 
-function inquirerPrompt(){
-    return inquirer
-        .prompt(mainPrompt)
-}   
+  
 
 function main() {
-    inquirerPrompt()
+    inquirer
+        .prompt(mainPrompt)
         .then((answers) => {
             if (answers.chosen === "Exit"){
                 console.log("Have a nice day!");
@@ -81,10 +79,16 @@ function main() {
                 return
             }
             else {
-                if (answers.chosen === 'View All Departments'){getDepartments(connection, main)}
+                if (answers.chosen === 'View All Departments') {getDepartments(connection, main)}
                 else if (answers.chosen === 'View All Roles') { getRoles(connection, main)}
                 else if (answers.chosen === 'View All Employees') { getEmployees(connection, main) }
-                else if (answers.chosen === 'Add a Department') { }
+                else if (answers.chosen === 'Add a Department') {
+                    inquirer.prompt({
+                        type: 'input',
+                        name: 'newName',
+                        message: 'What do you want to call the new department?',})
+                        .then(answers => {addDepartment(answers.newName, connection, main)})
+                     }
                 else if (answers.chosen === 'Add a Role') { }
                 else if (answers.chosen === 'Add an Employee') { }
                 else if (answers.chosen === 'Update an Employee Role') { }  

@@ -8,4 +8,14 @@ function getDepartments(con, func) {
     );
 }
 
-module.exports = getDepartments;
+function addDepartment(newName, con, func) {
+    con.promise().execute(
+        `INSERT INTO departments (department) VALUES ("${newName}")`,
+        function (err, results, fields) {
+            console.log(newName + " successfully added!");
+            func();
+        }
+    );
+}
+
+module.exports = {getDepartments, addDepartment};
