@@ -23,8 +23,7 @@ INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES 
 ("Harry", "Porter", 3, NULL),
 ("Hermione", "Grainger", 4, NULL),
-("Ronald", "McDonald", 1, 1),
-("Ronaldo", "McDonaldo", 2, 2),
+("Thom", "Puzzle", 1, 1),
 ("Ronald", "Weasel", 5, NULL),
 ("Draco", "Milfoil", 6, NULL),
 ("Neville", "Shortbottom", 7, NULL),
