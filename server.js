@@ -2,8 +2,12 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const cTable = require('console.table');
 const { getDepartments, addDepartment, getDepartmentsArray } = require("./utils/departments.js")
-const {getEmployees, getEmployeesArray, addEmployee} = require("./utils/employees.js")
+const { getEmployees, getEmployeesArray, addEmployee, updateEmployee} = require("./utils/employees.js")
 const { getRoles, addRole, getRolesArray } = require("./utils/roles.js")
+
+let roleList = [];
+let employeeList = [];
+let deptList = []; 
 
 // Connect to database
 const connection = mysql.createConnection({
@@ -25,12 +29,15 @@ connection.connect(function (err) {
 })
 
 function main() {
+    roleList = getRolesArray(connection);
+    employeeList = getEmployeesArray(connection);
+    deptList = getDepartmentsArray(connection);
     inquirer
         .prompt(mainPrompt)
         .then((answers) => {
             if (answers.chosen === "Exit"){
-                console.log("Have a nice day!");
                 connection.end();
+                console.log("Session ended. Have a nice day!");
                 return
             }
             else {
@@ -40,7 +47,7 @@ function main() {
                 else if (answers.chosen === 'Add a Department') {
                     queryForNewDepartment()
                     .then(answers => {
-                        addDepartment(answers.newName, connection, main)
+                        addDepartment(answers.newTitle, connection, main)
                     })
                 }
                 else if (answers.chosen === 'Add a Role') {
@@ -49,11 +56,17 @@ function main() {
                         addRole(answers.newName, answers.newSalary, answers.newDepartment, connection, main) 
                     })}
                 else if (answers.chosen === 'Add an Employee') {
-                    queryForNewEmployee().then(results => {
+                    queryForNewEmployee()
+                    .then(results => {
                         addEmployee(results, connection, main)
                     })
                  }
-                else if (answers.chosen === 'Update an Employee Role') { }  
+                else if (answers.chosen === 'Update an Employee Role') { 
+                    queryForEmployeeRoleUpdate()
+                    .then(results => {
+                        updateEmployee(results,connection, main);
+                    })
+                }  
             }   
         })       
         .catch(error => {
@@ -85,7 +98,7 @@ let mainPrompt = {
 };
 
 let queryForNewRole = function() {
-    let deptArry = getDepartmentsArray(connection);
+    //deptList = getDepartmentsArray(connection);
     return inquirer.prompt(
         [
             {
@@ -102,7 +115,7 @@ let queryForNewRole = function() {
                 type: 'list',
                 name: 'newDepartment',
                 message: "Which department are we adding this to?",
-                choices: deptArry
+                choices: deptList
             }
         ]
     )
@@ -119,8 +132,8 @@ let queryForNewDepartment = function () {
 }
 
 let queryForNewEmployee = function () {
-    let roleList = getRolesArray(connection);
-    let employeeList = getEmployeesArray(connection)
+    roleList = getRolesArray(connection);
+    employeeList = getEmployeesArray(connection)
     return inquirer.prompt(
         [
             {
@@ -143,23 +156,28 @@ let queryForNewEmployee = function () {
                 type: 'list',
                 name: 'manager',
                 message: "Who is the employee's manager?",
-                choices: employeeList
+                choices: employeeList,
+                default: null
             },
         ]
-
-
     )
 }
 
-/* // Default response for any other requests(Not Found) Catch all
-app.use((req, res) => {
-    console.log("err");
-    res.status(404).end();
-});
-
-// Start server after DB connection
-connection.on('open', () => {
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-}); */
+let queryForEmployeeRoleUpdate = function() {
+    return inquirer.prompt(
+        [
+            {
+                type: 'list',
+                name: 'employeeChosen',
+                message: "Choose an employee whose role you wish to change:",
+                choices: employeeList
+            },
+            {
+                type: 'list',
+                name: 'newRole',
+                message: "What's the employee's new role?",
+                choices: roleList
+            },
+        ]
+    )
+}

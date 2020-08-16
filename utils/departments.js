@@ -2,6 +2,7 @@ function getDepartments(con, func) {
     con.promise().query(
         'SELECT * FROM departments',
         function (err, results, fields) {
+            if (err) throw err;
             console.table(results);
             func();
         }
@@ -12,6 +13,7 @@ function getDepartmentsArray(con) {
     con.promise().query(
         'SELECT * FROM departments',
         function (err, results, fields) {
+            if (err) throw err;
             for (let i = 0; i < results.length; i++) {
                 results2.push({ "value": results[i].id, "name": results[i].department })
             }
@@ -24,6 +26,7 @@ function addDepartment(newName, con, func) {
     con.promise().execute(
         `INSERT INTO departments (department) VALUES ("${newName}")`,
         function (err, results, fields) {
+            if (err) throw err;
             console.log(newName + " successfully added!");
             func();
         }
