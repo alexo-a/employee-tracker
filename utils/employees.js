@@ -10,7 +10,6 @@ function getEmployees(con, func) {
         FROM employees c;`,
         function (err, results, fields) {
             if (err) throw err;
-            console.log("send help")
             console.table(results);
             func();
         }
