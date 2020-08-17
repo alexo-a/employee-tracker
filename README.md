@@ -33,8 +33,6 @@
 
 <br />
 
-
-<p align="center">
   <h1 align="center">Employee Tracker</h1>
   <p align="center">
     A simple command-line program to handle your employee tracking needs.
@@ -42,12 +40,10 @@
     <a href="https://github.com/alexo-a/employee-tracker"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    
     <a href="https://github.com/alexo-a/employee-tracker/issues">Report Bug</a>
-    ·
     <a href="https://github.com/alexo-a/employee-tracker/issues">Request Feature</a>
   </p>
-</p>
+
 
 
 
