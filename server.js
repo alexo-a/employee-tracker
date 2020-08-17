@@ -13,7 +13,7 @@ let deptList = [];
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'IloveLamp6969',
+    password: '',
     database: "employees"
 });
 
